@@ -57,17 +57,7 @@ export default function Owner() {
     fetchOwners();
 }, []);
 
-  const transactions = [
-    {
-      ChasisNumber: 'AAPS0L',
-      Mancompany: 'Chase & Co.',
-      Manyear: 'CAC',
-      platenumber: '+$4.37',
-      modelname: '$3,509.00',
-      price: '12.00',
-    },
-    // More transactions...
-  ]
+
 
   return (
     <>

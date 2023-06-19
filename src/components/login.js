@@ -27,11 +27,10 @@ export default function Login() {
         if (response.status === 200) {
           // Login successful
           // Redirect to the dashboard or any other page
+     console.log(response.data)
+          const token = response.data.token;
 
-          const {token, userInfo}= response.data;
-
-          authService.login(token);
-          authService.saveUserInfo(userInfo);
+          localStorage.setItem('token', token);
 
           navigate('/dashboard');
         } else {
