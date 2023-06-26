@@ -7,22 +7,19 @@ import Login from './components/login';
 import Signup from './components/signup';
 import Dashboard from './components/dashboard';
 import AddUser from './components/addUser';
-import AddVehicle from './components/addVehicle';
-import Vehicle from './components/vehicles';
-import Owner from './components/owners';
+import Cart from './components/cart';
 
 function App() {
   return (
     <Router>
     <Routes>
-      <Route path='/' exact element={ <Dashboard/> } />
-      <Route path="/signup" exact element={<Signup />} />
       <Route path="/login" exact element={<Login />} />
+      <Route path="/signup" exact element={<Signup />} />
+      <Route path='/' exact element={ <Login/> } />
+      <Route path='/cart' exact element={ <Cart/> } />
+
       <Route path='/dashboard' exact element={<Dashboard />} />
-      <Route path="/vehicles" exact element={<Vehicle />} />
-      <Route path='/newVehicle' exact element={<AddVehicle />} />
-      <Route path='/owners' exact element={<Owner/>} />
-      <Route path='/newOwner' exact element={<AddUser />} />
+      <Route path='/newEmployee' exact element={<AddUser />} />
     </Routes>
   </Router>
   );

@@ -27,15 +27,15 @@ export default function Signup() {
         event.preventDefault();
       
         try {
-          const response = await axios.post('http://localhost:5000/api/v1/auth/register', {
-            fullname: event.target.elements.name.value,
+          const response = await axios.post('http://localhost:8080/api/auth/signup', {
+            username: event.target.elements.name.value,
             email: event.target.elements.email.value,
-            phoneNumber: event.target.elements.phone.value,
-            nationalId: event.target.elements.nationalid.value,
             password: event.target.elements.password.value,
+            role: []
           });
       
-          if (response.data.status === 'success') {
+          if (response.data) {
+            console.log('ali is stupid');
             // Registration successful
             // Redirect to the dashboard or any other page
             navigate('/login');
@@ -88,14 +88,13 @@ export default function Signup() {
                   <form onSubmit={handleSubmit} method="POST" className="space-y-4">
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium leading-4 text-gray-900">
-                        Your Names  
+                        User name
                       </label>
                       <div className="mt-2">
                         <input
                           id="name"
                           name="name"
                           type="text"
-                          autoComplete="name"
                           required
                           className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
@@ -111,39 +110,6 @@ export default function Signup() {
                           id="email"
                           name="email"
                           type="email"
-                          autoComplete="email"
-                          required
-                          className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium leading-4 text-gray-900">
-                        Phone
-                      </label>
-                      <div className="mt-2">
-                        <input
-                          id="phone"
-                          name="phone"
-                          type="text"
-                          autoComplete="phone"
-                          required
-                          className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium leading-4 text-gray-900">
-                        National Id
-                      </label>
-                      <div className="mt-2">
-                        <input
-                          id="nationalid"
-                          name="nationalid"
-                          type="number"
-                          autoComplete="national Id"
                           required
                           className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />

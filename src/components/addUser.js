@@ -30,10 +30,18 @@ export default function AddUser() {
         try {
             const token = localStorage.getItem("token");
           const response = await axios.post('http://localhost:5000/api/v1/owner/register', {
-            fullname: event.target.elements.name.value,
+            
+            firstname: event.target.elements.firstname.value,
+            lastname: event.target.elements.lastname.value,
             nationalId: event.target.elements.nationalid.value,
             phoneNumber: event.target.elements.phone.value,
-            address: event.target.elements.address.value,
+            email: event.target.elements.email.value,
+            department: event.target.elements.department.value,
+            position: event.target.elements.position.value,
+            position: event.target.elements.position.value,
+            laptopManufacturer: event.target.elements.laptopManufacturer.value,
+            model: event.target.elements.model.value,
+            serrialNumber: event.target.elements.serrialNumber.value,
           },
           {headers: {
             Authorization: `Bearer ${token}`,
@@ -70,22 +78,33 @@ export default function AddUser() {
           <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
             <div className="mx-auto w-full max-w-sm lg:w-96">
               <div>
-                <img
-                  className="h-10 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                  alt="Your Company"
-                />
-                <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                <h2 className="text-2xl font-bold  tracking-tight text-gray-900">
                   Create a User
                 </h2>
               </div>
   
               <div className="mt-6">
                 <div>
-                  <form onSubmit={handleSubmit} method="POST" className="space-y-4">
+                  <form onSubmit={handleSubmit} method="POST" className="space-y-2">
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium leading-4 text-gray-900">
-                        Owner Names  
+                        First Name
+                      </label>
+                      <div className="mt-1">
+                        <input
+                          id="name"
+                          name="name"
+                          type="text"
+                          autoComplete="name"
+                          required
+                          className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium leading-4 text-gray-900">
+                        Last Name
                       </label>
                       <div className="mt-2">
                         <input
@@ -101,14 +120,14 @@ export default function AddUser() {
 
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium leading-4 text-gray-900">
-                        Owner national Id 
+                        National Id 
                       </label>
                       <div className="mt-2">
                         <input
-                          id="nationalid"
-                          name="nationalid"
+                          id="Position"
+                          name="Position"
                           type="string"
-                          autoComplete="nationalid"
+                          autoComplete="Position"
                           required
                           className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
@@ -118,7 +137,7 @@ export default function AddUser() {
 
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium leading-4 text-gray-900">
-                       Owner Phone
+                       Phone Number
                       </label>
                       <div className="mt-2">
                         <input
@@ -134,21 +153,99 @@ export default function AddUser() {
 
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium leading-4 text-gray-900">
-                        Owner Address
+                        Email
                       </label>
                       <div className="mt-2">
                         <input
-                          id="address"
-                          name="address"
-                          type="text"
-                          autoComplete="address"
+                          id="Email"
+                          name="Email"
+                          type="email"
+                          autoComplete="Email"
                           required
                           className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                       </div>
                     </div>
 
-  
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium leading-4 text-gray-900">
+                        department 
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          id="department"
+                          name="department"
+                          type="string"
+                          autoComplete="department"
+                          required
+                          className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium leading-4 text-gray-900">
+                        Position 
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          id="position"
+                          name="position"
+                          type="string"
+                          autoComplete="position"
+                          required
+                          className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium leading-4 text-gray-900">
+                        Laptop Manufacture 
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          id="manufacturer"
+                          name="manufacturer"
+                          type="string"
+                          autoComplete="manufacturer"
+                          required
+                          className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium leading-4 text-gray-900">
+                        Model
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          id="model"
+                          name="model"
+                          type="string"
+                          autoComplete="model"
+                          required
+                          className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium leading-4 text-gray-900">
+                        Serial Number
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          id="serialNumber"
+                          name="serialNumber"
+                          type="string"
+                          autoComplete="serialNumber"
+                          required
+                          className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+                    </div>
                     <div>
                       <button
                         type="submit"
