@@ -3,20 +3,7 @@ import axios from 'axios';
 import { BrowserRouter as Router, Route, Link ,useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
+
 export default function Signup() {
 
     const navigate = useNavigate();
@@ -35,9 +22,8 @@ export default function Signup() {
           });
       
           if (response.data) {
-            console.log('ali is stupid');
             // Registration successful
-            // Redirect to the dashboard or any other page
+            // Redirect to the dlogin
             navigate('/login');
           } else {
             // Registration failed
