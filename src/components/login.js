@@ -19,7 +19,7 @@ export default function Login() {
   
       try {
         console.log(username, password);
-        const response = await axios.post('http://localhost:8080/api/auth/signin', {
+        const response = await axios.post('http://localhost:8000/api/auth/signin', {
           username,
           password,
         });
@@ -80,7 +80,7 @@ export default function Login() {
                   <form onSubmit={handleSubmit} action="#" method="POST" className="space-y-6">
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                        Username
+                        Email
                       </label>
                       <div className="mt-2">
                         <input

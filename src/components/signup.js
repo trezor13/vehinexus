@@ -14,9 +14,10 @@ export default function Signup() {
         event.preventDefault();
       
         try {
-          const response = await axios.post('http://localhost:8080/api/auth/signup', {
-            username: event.target.elements.name.value,
+          const response = await axios.post('http://localhost:8000/api/auth/signup', {
+            name: event.target.elements.name.value,
             email: event.target.elements.email.value,
+            phone: event.target.elements.phone.value,
             password: event.target.elements.password.value,
             role: []
           });
@@ -74,7 +75,7 @@ export default function Signup() {
                   <form onSubmit={handleSubmit} method="POST" className="space-y-4">
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium leading-4 text-gray-900">
-                        User name
+                        Name
                       </label>
                       <div className="mt-2">
                         <input
@@ -96,6 +97,21 @@ export default function Signup() {
                           id="email"
                           name="email"
                           type="email"
+                          required
+                          className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium leading-4 text-gray-900">
+                        Phone
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          id="phone"
+                          name="phone"
+                          type="phone"
                           required
                           className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
