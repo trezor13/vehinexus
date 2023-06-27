@@ -1,7 +1,8 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import React from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Dialog, Transition } from '@headlessui/react'
+import Swal from "sweetalert2";
 
 import {
   Bars3Icon,
@@ -11,6 +12,7 @@ import {
   ShoppingBagIcon,
   InboxStackIcon
 } from '@heroicons/react/24/outline'
+import axios from 'axios';
 
 const navigation = [
   { name: 'Products', href: '/dashboard', icon: InboxStackIcon, current: false },
@@ -21,14 +23,63 @@ function classNames(...classes) {
 }
 
 export default function Cart() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  const people = [
-    {name: 'Computer', title: 'technology',quantity: '5',  email: '15000' },
-    {name: 'Mattress', title: 'technology', quantity: '5',email: '15000' },
-    {name: 'Computer', title: 'technology', quantity: '5',email: '15000' },
-    // More people...
-  ]
+
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const existing = localStorage.getItem("cart");  
+  const updatedItems = existing &&  JSON.parse(existing);
+ 
+ const quantities = [1,2,3,4,5,6,7,8,9,10];
+  const [quantity, setQuantity] = useState(1);
+  const [currentItem, setCurrentItem] = useState();
+
+  async function  handleCheckout() {
+    // Perform any necessary actions before displaying the popup
+
+    
+    try {
+        const requestData = updatedItems?.map((item) => {
+          return { productId: item.code, quantity: 1 };
+        });
+        console.log(requestData, "the request data");
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        };
+        const res = await axios.post(
+          "http://localhost:8088/api/product/purchase",
+          requestData,
+          headers
+        );
+        console.log(res, "the response");
+        if(res.status === 200){
+          Swal.fire({
+            icon: "success",
+            title: "Purchase Successful",
+            text: "You have successfully purchased the products!",
+            showConfirmButton: false,
+            timer: 2000, // Adjust the timer (in milliseconds) as needed
+          });
+          localStorage.removeItem("cart");
+          window.location.href = "/dashboard";
+        }
+    } catch (error) {
+      console.log(error, 'the error')
+        Swal.fire({
+          icon: "error",
+          title: "The quantity is not available",
+          text: "Change the quantity and try again!",
+          showConfirmButton: false,
+          timer: 2000, // Adjust the timer (in milliseconds) as needed
+        });
+    }
+  
+  }
+ const onChange = (e,item) => {
+  console.log(e.target.value, 'the changed value')
+    setQuantity(e.target.value);
+    setCurrentItem(item);
+ }
 
   return (
     <>
@@ -42,7 +93,11 @@ export default function Cart() {
       */}
       <div>
         <Transition.Root show={sidebarOpen} as={Fragment}>
-          <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
+          <Dialog
+            as="div"
+            className="relative z-50 lg:hidden"
+            onClose={setSidebarOpen}
+          >
             <Transition.Child
               as={Fragment}
               enter="transition-opacity ease-linear duration-300"
@@ -76,9 +131,16 @@ export default function Cart() {
                     leaveTo="opacity-0"
                   >
                     <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
-                      <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
+                      <button
+                        type="button"
+                        className="-m-2.5 p-2.5"
+                        onClick={() => setSidebarOpen(false)}
+                      >
                         <span className="sr-only">Close sidebar</span>
-                        <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                        <XMarkIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
                       </button>
                     </div>
                   </Transition.Child>
@@ -95,21 +157,23 @@ export default function Cart() {
                       <ul role="list" className="flex flex-1 flex-col gap-y-7">
                         <li>
                           <ul role="list" className="-mx-2 space-y-1">
-                            {navigation.map((item) => (
+                            {navigation?.map((item) => (
                               <li key={item.name}>
                                 <a
                                   href={item.href}
                                   className={classNames(
                                     item.current
-                                      ? 'bg-gray-50 text-indigo-600'
-                                      : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                      ? "bg-gray-50 text-indigo-600"
+                                      : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
+                                    "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                                   )}
                                 >
                                   <item.icon
                                     className={classNames(
-                                      item.current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
-                                      'h-6 w-6 shrink-0'
+                                      item.current
+                                        ? "text-indigo-600"
+                                        : "text-gray-400 group-hover:text-indigo-600",
+                                      "h-6 w-6 shrink-0"
                                     )}
                                     aria-hidden="true"
                                   />
@@ -143,21 +207,23 @@ export default function Cart() {
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <li>
                   <ul role="list" className="-mx-2 space-y-1">
-                    {navigation.map((item) => (
+                    {navigation?.map((item) => (
                       <li key={item.name}>
                         <a
                           href={item.href}
                           className={classNames(
                             item.current
-                              ? 'bg-gray-50 text-indigo-600'
-                              : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                              ? "bg-gray-50 text-indigo-600"
+                              : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
+                            "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                           )}
                         >
                           <item.icon
                             className={classNames(
-                              item.current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
-                              'h-6 w-6 shrink-0'
+                              item.current
+                                ? "text-indigo-600"
+                                : "text-gray-400 group-hover:text-indigo-600",
+                              "h-6 w-6 shrink-0"
                             )}
                             aria-hidden="true"
                           />
@@ -172,11 +238,17 @@ export default function Cart() {
           </div>
         </div>
         <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 lg:hidden">
-          <button type="button" className="-m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)}>
+          <button
+            type="button"
+            className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+            onClick={() => setSidebarOpen(true)}
+          >
             <span className="sr-only">Open sidebar</span>
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
-          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">Dashboard</div>
+          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">
+            Dashboard
+          </div>
           <a href="#">
             <span className="sr-only">Your profile</span>
             <img
@@ -189,76 +261,108 @@ export default function Cart() {
 
         <main className="py-10 lg:pl-72">
           <div className="px-4 sm:px-6 lg:px-8">
+            <div className="px-4 sm:px-6 lg:px-8">
+              <div className="px-4 sm:px-6 lg:px-8">
+                <div className="sm:flex sm:items-center">
+                  <div className="sm:flex-auto">
+                    <h1 className="text-base font-semibold leading-6 text-gray-900">
+                      Shopping Cart
+                    </h1>
+                    <p className="mt-2 text-sm text-gray-700">
+                      List of all products you added to cart
+                    </p>
+                  </div>
+                  <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                    <button
+                      type="button"
+                      className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      onClick={handleCheckout}
+                    >
+                      Check out
+                    </button>
+                  </div>
+                </div>
+                <div className="-mx-4 mt-8 sm:-mx-0">
+                  <table className="min-w-full divide-y divide-gray-300">
+                    <thead>
+                      <tr>
+                        <th
+                          scope="col"
+                          className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                        >
+                          Item Name
+                        </th>
+                        <th
+                          scope="col"
+                          className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                        >
+                          Type
+                        </th>
+                        <th
+                          scope="col"
+                          className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+                        >
+                          Quantity
+                        </th>
 
-
-
-            
-          <div className="px-4 sm:px-6 lg:px-8">
-      <div className="px-4 sm:px-6 lg:px-8">
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900">Shopping Cart</h1>
-          <p className="mt-2 text-sm text-gray-700">
-           List of all products you added to cart 
-          </p>
-        </div>
-        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <button
-            type="button"
-            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-          Check out
-          </button>
-        </div>
-      </div>
-      <div className="-mx-4 mt-8 sm:-mx-0">
-        <table className="min-w-full divide-y divide-gray-300">
-          <thead>
-            <tr>
-              <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
-                Item Name
-              </th>
-              <th
-                scope="col"
-                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
-              >
-                Type
-              </th>
-              <th
-                scope="col"
-                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
-              >
-                 Quantity
-              </th>
-
-              <th
-                scope="col"
-                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
-              >
-                Total Price
-              </th>
-             
-            
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {people.map((person) => (
-              <tr key={person.email}>
-                <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">{person.name}</td>
-                <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">{person.title}</td>
-                <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">{person.quantity}</td>   
-                <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">{person.email}</td>   
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-      
-    </div>
+                        <th
+                          scope="col"
+                          className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+                        >
+                          Unit Price
+                        </th>
+                        <th
+                          scope="col"
+                          className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+                        >
+                          Total Price
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 bg-white">
+                      {updatedItems?.map((item) => (
+                        <tr key={item.email}>
+                          <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
+                            {item.name}
+                          </td>
+                          <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                            {item.type}
+                          </td>
+                          <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                            <select
+                              id="demo-controlled-open-select"
+                              label=""
+                              onChange={(e) => onChange(e, item)}
+                              style={{ height: 30 }}
+                            >
+                              <option value="1"></option>
+                              {quantities?.map((quantity) => {
+                                return (
+                                  <option key={quantity} value={quantity}>
+                                    {quantity}
+                                  </option>
+                                );
+                              })}
+                            </select>
+                          </td>
+                          <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                            {item.price}
+                          </td>
+                          <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                            {currentItem?.code === item.code
+                              ? currentItem?.price * quantity
+                              : item.price}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
         </main>
       </div>
     </>
-  )
+  );
 }
